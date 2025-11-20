@@ -99,6 +99,7 @@ services:
           FHIR_SERVER_ADRESS: "http://fhir.openelis.org:8080/fhir/"      
         volumes:
             -  key_trust-store-volume:/etc/openelis-global
+            - ./volume/tomcat/hapi_server.xml:/opt/bitnami/tomcat/conf/server.xml
         
     frontend.openelis.org:
         image: itechuw/openelis-global-2-frontend:develop

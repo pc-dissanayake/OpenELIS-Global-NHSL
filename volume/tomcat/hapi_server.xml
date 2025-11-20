@@ -57,6 +57,12 @@
 
     <Connector port="8443" minSpareThreads="5" maxThreads="75" enableLookups="true" disableUploadTimeout="true" acceptCount="100" scheme="https" secure="true" clientAuth="true" sslProtocol="TLS" SSLEnabled="true" keystoreFile="/etc/openelis-global/keystore" keystoreType="PKCS12" keystorePass="kspass" truststoreFile="/etc/openelis-global/truststore" truststoreType="PKCS12" truststorePass="tspass" URIEncoding="UTF-8"/>
 
+    <Connector port="8080" protocol="HTTP/1.1" connectionTimeout="20000" redirectPort="8443" />
+
+    <Connector port="8080" protocol="HTTP/1.1"
+               connectionTimeout="20000"
+               redirectPort="8443" />
+
     <!-- A "Connector" using the shared thread pool-->
     <!--
     <Connector executor="tomcatThreadPool"
