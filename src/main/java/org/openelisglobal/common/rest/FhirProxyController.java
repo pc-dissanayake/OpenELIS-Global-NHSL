@@ -15,7 +15,8 @@ import org.springframework.web.client.RestTemplate;
 public class FhirProxyController {
 
     @GetMapping("/fhir/patients")
-    public ResponseEntity<String> getPatients(@RequestParam(defaultValue = "_count=50&_sort=-_lastUpdated") String query) {
+    public ResponseEntity<String> getPatients(
+            @RequestParam(defaultValue = "_count=50&_sort=-_lastUpdated") String query) {
         String fhirUrl = "http://fhir.openelis.org:8080/fhir/Patient?" + query;
 
         try {

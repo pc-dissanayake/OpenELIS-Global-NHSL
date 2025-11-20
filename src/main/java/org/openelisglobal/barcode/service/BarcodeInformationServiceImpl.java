@@ -36,6 +36,7 @@ public class BarcodeInformationServiceImpl implements BarcodeInformationService 
         updateSiteInfo("collectedByCheck", Boolean.toString(form.getCollectedByCheck()), "boolean", sysUserId);
         updateSiteInfo("patientSexCheck", Boolean.toString(form.getPatientSexCheck()), "boolean", sysUserId);
         updateSiteInfo("testsCheck", Boolean.toString(form.getTestsCheck()), "boolean", sysUserId);
+        updateSiteInfo("panelsCheck", Boolean.toString(form.getPanelsCheck()), "boolean", sysUserId);
 
         updateSiteInfo("prePrintUseAltAccession", Boolean.toString(!form.getPrePrintDontUseAltAccession()), "boolean",
                 sysUserId);

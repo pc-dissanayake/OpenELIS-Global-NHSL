@@ -116,7 +116,7 @@ const OrderEntryAdditionalQuestions = ({
 
   function convertQuestionnaireToResponse(questionnaire) {
     var items = [];
-    if (questionnaire && "item" in questionnaire) {
+    if (questionnaire && questionnaire.item && Array.isArray(questionnaire.item)) {
       for (let i = 0; i < questionnaire.item.length; i++) {
         let currentItem = questionnaire.item[i];
         items.push({
@@ -141,7 +141,7 @@ const OrderEntryAdditionalQuestions = ({
 
   function setAdditionalQuestions(res, event) {
     console.debug(res);
-    if ("item" in res) {
+    if (res && typeof res === 'object' && res.item && Array.isArray(res.item)) {
       setQuestionnaire(res);
       var convertedQuestionnaireResponse = convertQuestionnaireToResponse(res);
       setQuestionnaireResponse(convertedQuestionnaireResponse);
@@ -157,10 +157,13 @@ const OrderEntryAdditionalQuestions = ({
     }
   }
   const getAnswer = (linkId) => {
-    var responseItem = questionnaireResponse?.item?.find(
+    if (!questionnaire || !questionnaire.item || !Array.isArray(questionnaire.item) || !questionnaireResponse || !questionnaireResponse.item || !Array.isArray(questionnaireResponse.item)) {
+      return "";
+    }
+    var responseItem = questionnaireResponse.item.find(
       (item) => item.linkId === linkId,
     );
-    var questionnaireItem = questionnaire?.item?.find(
+    var questionnaireItem = questionnaire.item.find(
       (item) => item.linkId === linkId,
     );
     switch (questionnaireItem.type) {
@@ -194,9 +197,13 @@ const OrderEntryAdditionalQuestions = ({
             : responseItem?.answer[0]?.valueString;
         }
     }
+    return "";
   };
 
   const answerChange = (e) => {
+    if (!questionnaire || !questionnaire.item || !Array.isArray(questionnaire.item) || !questionnaireResponse || !questionnaireResponse.item || !Array.isArray(questionnaireResponse.item)) {
+      return;
+    }
     const { id, value } = e.target;
 
     var updatedQuestionnaireResponse = { ...questionnaireResponse };

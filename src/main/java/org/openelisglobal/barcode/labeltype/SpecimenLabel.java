@@ -15,6 +15,7 @@ import org.openelisglobal.common.util.ConfigurationProperties.Property;
 import org.openelisglobal.common.util.DateUtil;
 import org.openelisglobal.common.util.StringUtil;
 import org.openelisglobal.internationalization.MessageUtil;
+import org.openelisglobal.panel.valueholder.Panel;
 import org.openelisglobal.patient.service.PatientService;
 import org.openelisglobal.patient.valueholder.Patient;
 import org.openelisglobal.person.service.PersonService;
@@ -70,6 +71,7 @@ public class SpecimenLabel extends Label {
                 .getPropertyValue(Property.SPECIMEN_FIELD_COLLECTED_BY);
         String useSex = ConfigurationProperties.getInstance().getPropertyValue(Property.SPECIMEN_FIELD_SEX);
         String useTests = ConfigurationProperties.getInstance().getPropertyValue(Property.SPECIMEN_FIELD_TESTS);
+        String usePanels = ConfigurationProperties.getInstance().getPropertyValue(Property.SPECIMEN_FIELD_PANELS);
         if ("true".equals(useSex)) {
             LabelField sexField = new LabelField(MessageUtil.getMessage("barcode.label.info.patientsex"), "", 4);
             sexField.setDisplayFieldName(true);
@@ -92,7 +94,12 @@ public class SpecimenLabel extends Label {
             collectorField.setUnderline(true);
             belowFields.add(collectorField);
         }
-        if ("true".equals(useTests)) {
+        // Show panels if panelsCheck is true (takes priority over tests)
+        if ("true".equals(usePanels)) {
+            LabelField panelsField = new LabelField(MessageUtil.getMessage("barcode.label.info.panels"), "", 20);
+            panelsField.setStartNewline(true);
+            belowFields.add(panelsField);
+        } else if ("true".equals(useTests)) {
             LabelField testsField = new LabelField(MessageUtil.getMessage("barcode.label.info.tests"),
                     StringUtil.replaceNullWithEmptyString(tests.toString()), 20);
             testsField.setStartNewline(true);
@@ -150,12 +157,27 @@ public class SpecimenLabel extends Label {
 
         String collector = sampleItem.getCollector();
         StringBuilder tests = new StringBuilder();
+        StringBuilder panels = new StringBuilder();
         String seperator = ""; // separator for appending tests to each other
+        String panelSeperator = ""; // separator for appending panels to each other
         List<Analysis> analysisList = analysisService.getAnalysesBySampleItem(sampleItem);
+        java.util.Set<String> uniquePanels = new java.util.LinkedHashSet<>(); // To track unique panel names
         for (Analysis analysis : analysisList) {
             tests.append(seperator);
             tests.append(TestServiceImpl.getUserLocalizedTestName(analysis.getTest()));
             seperator = ", ";
+
+            // Collect unique panel names
+            Panel panel = analysis.getPanel();
+            if (panel != null && !StringUtil.isNullorNill(panel.getPanelName())) {
+                uniquePanels.add(panel.getPanelName());
+            }
+        }
+        // Build deduplicated panels string
+        for (String panelName : uniquePanels) {
+            panels.append(panelSeperator);
+            panels.append(panelName);
+            panelSeperator = ", ";
         }
 
         // adding fields below bar code
@@ -165,6 +187,7 @@ public class SpecimenLabel extends Label {
                 .getPropertyValue(Property.SPECIMEN_FIELD_COLLECTED_BY);
         String useSex = ConfigurationProperties.getInstance().getPropertyValue(Property.SPECIMEN_FIELD_SEX);
         String useTests = ConfigurationProperties.getInstance().getPropertyValue(Property.SPECIMEN_FIELD_TESTS);
+        String usePanels = ConfigurationProperties.getInstance().getPropertyValue(Property.SPECIMEN_FIELD_PANELS);
         if ("true".equals(useSex)) {
             LabelField sexField = new LabelField(MessageUtil.getMessage("barcode.label.info.patientsex"),
                     StringUtil.replaceNullWithEmptyString(patient.getGender()), 4);
@@ -186,7 +209,13 @@ public class SpecimenLabel extends Label {
             collectorField.setDisplayFieldName(true);
             belowFields.add(collectorField);
         }
-        if ("true".equals(useTests)) {
+        // Show panels if panelsCheck is true (takes priority over tests)
+        if ("true".equals(usePanels)) {
+            LabelField panelsField = new LabelField(MessageUtil.getMessage("barcode.label.info.panels"),
+                    StringUtil.replaceNullWithEmptyString(panels.toString()), 20);
+            panelsField.setStartNewline(true);
+            belowFields.add(panelsField);
+        } else if ("true".equals(useTests)) {
             LabelField testsField = new LabelField(MessageUtil.getMessage("barcode.label.info.tests"),
                     StringUtil.replaceNullWithEmptyString(tests.toString()), 20);
             testsField.setStartNewline(true);

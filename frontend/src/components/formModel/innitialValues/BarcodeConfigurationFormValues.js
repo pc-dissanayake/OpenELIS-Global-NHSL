@@ -21,6 +21,7 @@ const BarcodeConfigurationFormValues = {
   collectionDateCheck: true,
   collectedByCheck: true,
   testsCheck: true,
+  panelsCheck: true,
   patientSexCheck: true,
   prePrintDontUseAltAccession: true,
   prePrintAltAccessionPrefix: "",

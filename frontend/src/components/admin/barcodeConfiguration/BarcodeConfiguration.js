@@ -465,6 +465,21 @@ function BarcodeConfiguration() {
                                   }
                                 />
                                 <Checkbox
+                                  id="panels"
+                                  checked={values.panelsCheck}
+                                  onChange={(e) => {
+                                    const isChecked = e.target.checked;
+                                    setBarcodeFormValues({
+                                      ...barcodeFromValues,
+                                      panelsCheck: isChecked,
+                                    });
+                                    setSaveButton(false);
+                                  }}
+                                  labelText={
+                                    <FormattedMessage id="barcode.label.info.panels" />
+                                  }
+                                />
+                                <Checkbox
                                   id="patientsexfull"
                                   checked={values.patientSexCheck}
                                   onChange={(e) => {

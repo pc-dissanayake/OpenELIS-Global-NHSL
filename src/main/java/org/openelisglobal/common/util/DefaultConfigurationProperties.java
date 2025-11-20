@@ -316,6 +316,7 @@ public class DefaultConfigurationProperties extends ConfigurationProperties {
         properties.setPropertyValue(Property.SPECIMEN_FIELD_COLLECTED_BY, "true");
         properties.setPropertyValue(Property.SPECIMEN_FIELD_SEX, "true");
         properties.setPropertyValue(Property.SPECIMEN_FIELD_TESTS, "true");
+        properties.setPropertyValue(Property.SPECIMEN_FIELD_PANELS, "false");
 
         properties.setPropertyValue(Property.ALT_ACCESSION_PREFIX, "");
         properties.setPropertyValue(Property.USE_ALT_ACCESSION_PREFIX, "false");

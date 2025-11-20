@@ -124,11 +124,13 @@ public class BarcodeConfigurationRestController extends BaseController {
         String collectedByCheck = ConfigurationProperties.getInstance()
                 .getPropertyValue(Property.SPECIMEN_FIELD_COLLECTED_BY);
         String testsCheck = ConfigurationProperties.getInstance().getPropertyValue(Property.SPECIMEN_FIELD_TESTS);
+        String panelsCheck = ConfigurationProperties.getInstance().getPropertyValue(Property.SPECIMEN_FIELD_PANELS);
         String patientSexCheck = ConfigurationProperties.getInstance().getPropertyValue(Property.SPECIMEN_FIELD_SEX);
         // set the optional specimen values
         form.setCollectionDateCheck(Boolean.valueOf(collectionDateCheck));
         form.setCollectedByCheck(Boolean.valueOf(collectedByCheck));
         form.setTestsCheck(Boolean.valueOf(testsCheck));
+        form.setPanelsCheck(Boolean.valueOf(panelsCheck));
         form.setPatientSexCheck(Boolean.valueOf(patientSexCheck));
 
         Boolean prePrintUseAltAccession = Boolean

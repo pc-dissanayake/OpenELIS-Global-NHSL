@@ -56,6 +56,8 @@ public class BarcodeConfigurationForm extends BaseForm {
 
     private boolean testsCheck;
 
+    private boolean panelsCheck;
+
     private boolean patientSexCheck;
 
     private boolean prePrintDontUseAltAccession;
@@ -173,6 +175,14 @@ public class BarcodeConfigurationForm extends BaseForm {
 
     public void setTestsCheck(boolean testsCheck) {
         this.testsCheck = testsCheck;
+    }
+
+    public boolean getPanelsCheck() {
+        return panelsCheck;
+    }
+
+    public void setPanelsCheck(boolean panelsCheck) {
+        this.panelsCheck = panelsCheck;
     }
 
     public boolean getPatientSexCheck() {

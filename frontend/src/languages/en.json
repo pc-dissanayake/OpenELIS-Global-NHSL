@@ -162,6 +162,7 @@
   "barcode.label.info.patientname": "Patient Name",
   "barcode.label.info.patientsexfull": "Patient Sex",
   "barcode.label.info.tests": "Tests",
+  "barcode.label.info.panels": "Panels",
   "barcode.notification.save": "BarCode Configurations has been saved.",
   "barcode.print.individual.button": "Print Label",
   "barcode.print.preprint": "Pre-Print Barcodes",

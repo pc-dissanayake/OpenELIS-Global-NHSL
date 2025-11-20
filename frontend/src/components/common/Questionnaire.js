@@ -207,9 +207,8 @@ const Questionnaire = ({
       </>
     );
   };
-  if (questionnaire) {
+  if (questionnaire && questionnaire.item && Array.isArray(questionnaire.item)) {
     var inputs =
-      "item" in questionnaire &&
       questionnaire.item.map((item, index) => {
         return <span key={index}>{renderQuestion(item)}</span>;
       });

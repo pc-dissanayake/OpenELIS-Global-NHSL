@@ -201,6 +201,7 @@ public abstract class ConfigurationProperties {
         SPECIMEN_FIELD_DATE("collectionDateCheck", "text"), //
         SPECIMEN_FIELD_SEX("patientSexCheck", "text"), //
         SPECIMEN_FIELD_COLLECTED_BY("collectedByCheck", "text"), SPECIMEN_FIELD_TESTS("testsCheck", "text"), //
+        SPECIMEN_FIELD_PANELS("panelsCheck", "text"), //
         BLOCK_BARCODE_HEIGHT("heightBlockLabels", "text"), //
         BLOCK_BARCODE_WIDTH("widthBlockLabels", "text"), //
         SLIDE_BARCODE_HEIGHT("heightSlideLabels", "text"), //
