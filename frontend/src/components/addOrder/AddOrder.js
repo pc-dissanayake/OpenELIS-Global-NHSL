@@ -45,10 +45,13 @@ const AddOrder = (props) => {
   const [siteNames, setSiteNames] = useState([]);
   const [innitialized, setInnitialized] = useState(false);
   const [departments, setDepartments] = useState([]);
+  const [recentPatients, setRecentPatients] = useState([]);
+  const [loadingPatients, setLoadingPatients] = useState(false);
 
   useEffect(() => {
     componentMounted.current = true;
     getFromOpenElisServer("/rest/SamplePatientEntry", getSampleEntryPreform);
+    fetchRecentPatients();
     window.scrollTo(0, 0);
     return () => {
       componentMounted.current = false;
@@ -466,6 +469,30 @@ const AddOrder = (props) => {
     }
   };
 
+  const fetchRecentPatients = async () => {
+    setLoadingPatients(true);
+    try {
+      const response = await fetch('/rest/fhir/patients');
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const bundle = await response.json();
+      const patients = (bundle.entry || []).map(entry => {
+        const resource = entry.resource;
+        const name = resource.name && resource.name[0] ? `${resource.name[0].family || ''} ${resource.name[0].given ? resource.name[0].given.join(' ') : ''}`.trim() : '';
+        return {
+          id: resource.id,
+          name: name || '(no name)',
+          lastUpdated: resource.meta?.lastUpdated || ''
+        };
+      });
+      setRecentPatients(patients);
+    } catch (error) {
+      console.error('Failed to fetch recent patients:', error);
+      setRecentPatients([]);
+    } finally {
+      setLoadingPatients(false);
+    }
+  };
+
   return (
     <>
       <Stack gap={10}>
@@ -475,6 +502,31 @@ const AddOrder = (props) => {
               <h3>
                 <FormattedMessage id="order.title" />
               </h3>
+            </Column>
+            <Column lg={16} md={8} sm={4}>
+              <h4>Recent Patients from FHIR</h4>
+              {loadingPatients && <p>Loading...</p>}
+              {!loadingPatients && recentPatients.length > 0 && (
+                <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                  <thead>
+                    <tr>
+                      <th style={{ border: '1px solid #ddd', padding: '8px' }}>ID</th>
+                      <th style={{ border: '1px solid #ddd', padding: '8px' }}>Name</th>
+                      <th style={{ border: '1px solid #ddd', padding: '8px' }}>Last Updated</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {recentPatients.map(patient => (
+                      <tr key={patient.id}>
+                        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{patient.id}</td>
+                        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{patient.name}</td>
+                        <td style={{ border: '1px solid #ddd', padding: '8px' }}>{patient.lastUpdated}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+              {!loadingPatients && recentPatients.length === 0 && <p>No recent patients found.</p>}
             </Column>
             {configurationProperties.ACCEPT_EXTERNAL_ORDERS === "true" && (
               <Column lg={16} md={8} sm={4}>
